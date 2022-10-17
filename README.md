@@ -4,7 +4,7 @@ Corresponde a Tarea 6 del Curso Node.js Avanzado impartido por profesor Mario Ar
 ## Como se instalar el proyecto
 - Descargar node desde https://nodejs.org/en/download/
 - Instalar node.js en el equipo.
-- Abrir proyecto Tarea5_FelipeZura en editor de código preferido (se recomienda visual studio code)
+- Abrir proyecto Tarea6_FelipeZura en editor de código preferido (se recomienda visual studio code)
 - Ejecutar en consola la siguiente instrucción: node app.js start
 
 ## Como se inicia la app
