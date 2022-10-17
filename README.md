@@ -1,5 +1,5 @@
 # Chat con express y socket.io
-Corresponde a Tarea 5 del Curso Node.js Avanzado impartido por profesor Mario Araya
+Corresponde a Tarea 6 del Curso Node.js Avanzado impartido por profesor Mario Araya
 
 ## Como se instalar el proyecto
 - Descargar node desde https://nodejs.org/en/download/
