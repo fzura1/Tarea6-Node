@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>      
+  </head>
+  <body>
+    <header>
+      <ul class="sidenav sidenav-fixed">
+        <div class="container">
+        <li><a class="waves-effect" href="#!">Miembros</a></li>
+        <li><input id="boxNombre" type="text" placeholder="Su Nombre" size="13" maxlength="20"/></li>
+        <li><button class="waves-effect waves-light btn-small" type="submit" id="buttonNombre" onClick="setNombre()">Agregar usuario</button></li>  
+        <ul id="listaUsuarios"></ul>
+        </div>
+      </ul>
+    </header>
+    <main>
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content">
+              <span class="card-title">Mensajes</span>
+              </div>
+              <div class="card-content">
+                <div class="row valign-wrapper">
+                  <div class="col s12">
+                    <ul id="mensajes"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>   
+      </div>
+    </main>
+    <footer class="page-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col l12 s12">
+            <form action="javascript:void(0);" class="chat-input">
+              <input type="text" id="boxMensaje" autocomplete="off" disabled="true" placeholder="Escriba su mensaje acá.." class="mb-0" maxlength="60">
+              <button id="buttonMensaje" class="btn waves-effect waves-light" disabled="true">Enviar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </footer>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+     var listaUsuarios = [];
+      var miNombre = "";
+      Escribe = false;
+
+      var socket = io();
+
+      socket.on("connect", function(e){
+        socket.emit("inicio");
+      });
+
+      socket.on('nombre', function(nombre){
+        miNombre=nombre;
+      });
+
+      $('form').submit(function(){
+        var tmp = [miNombre , $("#boxMensaje").val()];
+        socket.emit("enviar mensaje chat", tmp);
+        $("#boxMensaje").val("");
+        Escribe = false;
+        socket.emit("no escribiendo");
+        return false;
+      });
+
+      socket.on('mensaje chat', function(msg){
+        var today = new Date();
+        var now = today.toLocaleTimeString('es-CL');
+        $("#mensajes").append("<li>"+now+" <b>"+msg[0]+":</b> "+msg[1]);
+      });
+
+      socket.on('info', function(inf){
+        $('#mensajes').append('<li><i>' + inf + '</i></li>');
+      });
+
+      socket.on('lista usuarios', function(listaUsuarios){
+          actualizarListadoUsuarios(listaUsuarios);
+      });
+
+      socket.on('esta escribiendo', function(listaUsuarios){
+          actualizarListadoUsuarios(listaUsuarios);
+      });
+
+      function setNombre(){
+        miNombre = $("#boxNombre").val();
+        socket.emit("set nombre", miNombre);
+        $("#boxNombre").prop("disabled", true );
+        $("#buttonNombre").hide();
+        $("#boxMensaje").prop("disabled", false );
+        $("#buttonMensaje").prop("disabled", false );
+      }
+
+      function actualizarListadoUsuarios(u){
+        var lista = document.getElementById("listaUsuarios");
+        lista.innerHTML = "";
+        for (var i = 0; i < u.length; i++ ) {
+            var item = document.createElement("li");
+            item.innerHTML = u[i];
+            lista.appendChild(item);
+        }
+      }
+
+      $('#boxMensaje').on('input', function() {
+        if ( $('#boxMensaje').val().length != "" && Escribe == false ){
+            socket.emit("escribiendo");
+            Escribe = true;
+        }else if ( $('#boxMensaje').val() == "" ) {
+            socket.emit("no escribiendo");
+            Escribe = false;
+        }
+      });
+  </script>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+    main {
+      flex: 1 0 auto;
+    }
+    header, main, footer {
+      padding-left: 240px;
+    }
+    @media only screen and (max-width : 992px) {
+      header, main, footer {
+        padding-left: 0;
+      }
+    }
+  </style>  
+</body>
+</html>       

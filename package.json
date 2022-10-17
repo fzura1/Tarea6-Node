@@ -1,0 +1,17 @@
+{
+  "name": "tarea5_felipezura",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Felipe Zura",
+  "license": "ISC",
+  "description": "Tarea 5 express y socket.io",
+  "dependencies": {
+    "express": "^4.18.1",
+    "ip": "^1.1.8",
+    "socket.io": "^4.5.2"
+  }
+}
