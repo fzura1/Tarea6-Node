@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-    "build": "node app.js start"
+    "build": "yarn start app.js "
   },
   "keywords": [],
   "author": "Felipe Zura",
